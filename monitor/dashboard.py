@@ -1,5 +1,6 @@
 from flask import Flask, request
 import json
+import os
 
 app = Flask(__name__)
 
@@ -88,14 +89,24 @@ def home():
 @app.route("/config")
 def config():
 
-    with open(
-        "config.json",
-        "r"
-    ) as arquivo:
+    if os.path.exists("config.json"):
 
-        dados = json.load(
-            arquivo
-        )
+    	with open(
+        	"config.json",
+        	"r"
+    	) as arquivo:
+
+        	dados = json.load(
+            	arquivo
+        	)
+
+    else:
+
+     	dados = {
+        	"image": "",
+        	"container": "",
+        	"healthcheck_url": ""
+    	}
 
     return f"""
     <html>

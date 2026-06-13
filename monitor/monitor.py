@@ -168,9 +168,9 @@ def verificar_aplicacao():
     try:
 
         resposta = requests.get(
-    		HEALTHCHECK_URL,
-    		timeout=5
-	)
+            HEALTHCHECK_URL,
+            timeout=5
+    )
 
         return resposta.status_code == 200
 
@@ -214,7 +214,7 @@ while True:
     "%Y-%m-%d %H:%M:%S"
     )
 
-    salvar_status(status)	
+    salvar_status(status)    
 
     try:
 
@@ -236,7 +236,7 @@ while True:
                 "Nova versão detectada!"
             )
             enviar_telegram(
-          	f"📦 Nova versão detectada\n\nImagem: {IMAGE_NAME}"
+              f"📦 Nova versão detectada\n\nImagem: {IMAGE_NAME}"
             )
           
             try:
@@ -294,15 +294,15 @@ while True:
                 status["health_check"] = "OK"
 
                 status["total_atualizacoes"] += 1
-		status["ultima_atualizacao"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                status["ultima_atualizacao"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
                 salvar_status(status)
-                
+
                 registrar_log(
                     "Container atualizado com sucesso!"
                 )
                 enviar_telegram(
-                	f"✅ Atualização concluída\n\nImagem: {IMAGE_NAME}\nContainer: {CONTAINER_NAME}"
+                    f"✅ Atualização concluída\n\nImagem: {IMAGE_NAME}\nContainer: {CONTAINER_NAME}"
                 )
             else:
 
@@ -310,7 +310,7 @@ while True:
                     "Health Check FALHOU!"
                 )
                 enviar_telegram(
-                	f"❌ Health Check falhou\n\nImagem: {IMAGE_NAME}"
+                    f"❌ Health Check falhou\n\nImagem: {IMAGE_NAME}"
                 )
                 status["health_check"] = "FALHOU"
 
