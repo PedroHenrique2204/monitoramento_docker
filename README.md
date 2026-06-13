@@ -1,115 +1,224 @@
-# Projeto — Atualização Automática de Containers Baseada em Novas Versões de Imagens Docker
+# AutoDocker Update Monitor
 
-## Descrição
+Sistema de monitoramento e atualização automática de containers Docker baseado em imagens armazenadas no Docker Hub.
 
-Solução desenvolvida para monitorar imagens Docker publicadas no DockerHub e atualizar automaticamente containers em execução quando uma nova versão da imagem for disponibilizada.
+## Sobre o Projeto
+
+O AutoDocker Update Monitor foi desenvolvido com o objetivo de automatizar o processo de atualização de aplicações containerizadas. O sistema monitora periodicamente uma imagem Docker hospedada em um repositório remoto e, ao detectar uma nova versão, realiza automaticamente a atualização do container em execução.
+
+Além da atualização automática, o projeto oferece:
+
+* Dashboard Web para monitoramento e configuração.
+* Health Check configurável.
+* Notificações via Telegram.
+* Registro de logs das operações realizadas.
+* Execução totalmente containerizada com Docker Compose.
 
 ---
 
 ## Objetivo
 
-Monitorar periodicamente uma imagem Docker identificada pela tag `latest` e, ao detectar uma atualização, realizar automaticamente:
+O objetivo principal do projeto é reduzir a necessidade de intervenção manual em ambientes Docker, permitindo que aplicações sejam atualizadas automaticamente sempre que uma nova imagem for publicada.
 
-* Download da nova imagem;
-* Interrupção do container antigo;
-* Remoção do container desatualizado;
-* Criação de um novo container utilizando a imagem atualizada;
-* Restauração automática da aplicação.
+---
+
+## Funcionalidades
+
+### Monitoramento de Imagens Docker
+
+O sistema verifica periodicamente o digest da imagem configurada no Docker Hub e compara com a última versão conhecida.
+
+### Atualização Automática
+
+Quando uma nova versão é detectada:
+
+1. O container atual é interrompido.
+2. O container antigo é removido.
+3. A nova imagem é baixada.
+4. Um novo container é criado automaticamente.
+
+### Health Check
+
+Após a atualização, o sistema realiza uma verificação em uma URL configurada pelo usuário para garantir que a aplicação está funcionando corretamente.
+
+### Dashboard Web
+
+O dashboard permite:
+
+* Visualizar o status do monitor.
+* Verificar a última atualização realizada.
+* Consultar o total de atualizações.
+* Visualizar a imagem monitorada.
+* Alterar as configurações do monitor.
+* Configurar a URL do Health Check.
+
+### Notificações Telegram
+
+O sistema envia mensagens informando:
+
+* Detecção de novas versões.
+* Atualizações realizadas.
+* Resultado do Health Check.
+* Possíveis erros durante o processo.
+
+### Logs
+
+Todas as ações realizadas pelo monitor são registradas em arquivo de log para auditoria e acompanhamento.
+
+---
+
+## Arquitetura do Projeto
+
+```text
+Docker Hub
+     │
+     ▼
+Monitor Python
+     │
+     ├── Verifica novas imagens
+     ├── Atualiza containers
+     ├── Executa Health Check
+     └── Envia notificações Telegram
+                │
+                ▼
+          Dashboard Web
+```
+
+---
+
+## Estrutura do Projeto
+
+```text
+.
+├── app
+│   ├── app.py
+│   └── Dockerfile
+│
+├── monitor
+│   ├── dashboard.py
+│   ├── docker-compose.yml
+│   ├── Dockerfile
+│   ├── monitor.py
+│   ├── requirements.txt
+│   └── config.example.json
+│
+├── .gitignore
+└── README.md
+```
 
 ---
 
 ## Tecnologias Utilizadas
 
-* Docker
-* Docker Hub
 * Python 3
+* Docker
+* Docker Compose
 * Flask
 * Docker SDK for Python
----
-
-## Estrutura do Projeto
-
-
-projeto/
-│
-├── app/
-│   ├── app.py
-│   └── Dockerfile
-│
-├── monitor/
-│   ├── monitor.py
-│   ├── ultimo_digest.txt
-│   └── requirements.txt
-│
-└── README.md
----
-
-## Funcionamento
-
-O sistema executa verificações periódicas na imagem Docker hospedada no Docker Hub.
-
-Quando uma alteração é detectada:
-
-1. A nova imagem é baixada.
-2. O container atual é interrompido.
-3. O container antigo é removido.
-4. Um novo container é criado utilizando a imagem atualizada.
-5. A aplicação volta a ficar disponível automaticamente.
+* Requests
+* Telegram Bot API
 
 ---
 
-## Fluxo de Atualização
+## Como Funciona
 
+### Fluxo de Atualização
 
-Docker Hub
-    │
-    ▼
-Monitor verifica digest
-    │
-    ▼
-Nova versão encontrada?
-    │
- ┌──┴──┐
- │     │
-Não   Sim
- │     │
- │     ▼
- │  docker pull
- │     ▼
- │ stop container
- │     ▼
- │ remove container
- │     ▼
- │ create container
- │     ▼
- │ aplicação atualizada
- │
- ▼
-aguarda próxima verificação
+1. O monitor consulta o Docker Hub.
+2. Obtém o digest mais recente da imagem.
+3. Compara com o digest salvo anteriormente.
+4. Caso exista diferença:
+
+   * Faz o pull da nova imagem.
+   * Remove o container antigo.
+   * Cria um novo container.
+   * Executa o Health Check.
+   * Atualiza o dashboard.
+   * Envia notificação para o Telegram.
 
 ---
 
-## Como Executar
+## Configuração
 
-### Construir a imagem
+A configuração é realizada através do dashboard web.
 
-docker build -t usuario/flask-app:latest
+Exemplo:
 
-### Enviar para o Docker Hub
+```json
+{
+    "image": "usuario/aplicacao:latest",
+    "container": "nome-container",
+    "healthcheck_url": "http://IP:5000/"
+}
+```
 
-docker push usuario/flask-app:latest
+---
 
+## Dashboard
 
-### Executar o monitor
+Após iniciar o sistema, o dashboard estará disponível em:
 
-python3 monitor.py
+```text
+http://IP_DO_SERVIDOR:8080
+```
+
+Informações exibidas:
+
+* Status do monitor.
+* Imagem monitorada.
+* Container monitorado.
+* Última verificação.
+* Última atualização.
+* Total de atualizações.
+* Resultado do Health Check.
+
+---
+
+## Execução
+
+### Construir os containers
+
+```bash
+docker compose build
+```
+
+### Iniciar os serviços
+
+```bash
+docker compose up -d
+```
+
+### Verificar containers
+
+```bash
+docker ps
+```
+
+### Visualizar logs
+
+```bash
+docker logs monitor-container
+```
 
 ---
 
 ## Exemplo de Atualização
 
 1. Alterar o código da aplicação.
-2. Gerar uma nova imagem Docker.
-3. Publicar a imagem atualizada no Docker Hub.
-4. O monitor detectará automaticamente a alteração.
-5. O container será atualizado sem intervenção manual.
+2. Construir uma nova imagem:
+
+```bash
+docker build -t usuario/aplicacao:latest .
+```
+
+3. Enviar para o Docker Hub:
+
+```bash
+docker push usuario/aplicacao:latest
+```
+
+4. O monitor detectará automaticamente a nova versão e realizará a atualização.
+
+---
+
+
