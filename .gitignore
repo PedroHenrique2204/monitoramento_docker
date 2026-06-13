@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+
+monitor/config.json
+monitor/monitor.log
+monitor/status.json
+monitor/ultimo_digest.txt
