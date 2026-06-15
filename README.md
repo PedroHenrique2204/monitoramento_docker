@@ -124,14 +124,14 @@ Configuração
 Toda a configuração é realizada através do dashboard web.
 
 Exemplo do arquivo de configuração
-{
+
     "image": "usuario/aplicacao:latest",
     "container": "nome-container",
     "healthcheck_url": "http://IP:5000",
     "telegram_enabled": true,
     "telegram_token": "TOKEN_DO_BOT",
     "telegram_chat_id": "CHAT_ID"
-}
+
 Campos de Configuração
 Campo	Descrição
 image	Imagem Docker monitorada
