@@ -11,16 +11,29 @@ client = docker.from_env()
 CONFIG_FILE = "config.json"
 
 def carregar_configuracao():
+
     if not os.path.exists(CONFIG_FILE):
 
-        raise Exception(
-            "Arquivo config.json não encontrado."
-        )
+        config_padrao = {
+            "image": "",
+            "container": "",
+            "healthcheck_url": "",
+            "telegram_enabled": False,
+            "telegram_token": "",
+            "telegram_chat_id": ""
+        }
 
-    with open(
-        CONFIG_FILE,
-        "r"
-    ) as arquivo:
+        with open(CONFIG_FILE, "w") as arquivo:
+
+            json.dump(
+                config_padrao,
+                arquivo,
+                indent=4
+            )
+
+        return config_padrao
+
+    with open(CONFIG_FILE, "r") as arquivo:
 
         return json.load(
             arquivo
@@ -104,11 +117,6 @@ def registrar_log(mensagem):
         arquivo.write(
             linha + "\n"
         )
-
-def ler_configuracao():
-
-    with open(CONFIG_FILE, "r") as arquivo:
-        return json.load(arquivo)
 
 
 def enviar_telegram(mensagem):
@@ -212,19 +220,45 @@ status["status"] = "ONLINE"
 salvar_status(status)
 
 while True:
+
     config = carregar_configuracao()
 
     IMAGE_NAME = config["image"]
     CONTAINER_NAME = config["container"]
+    HEALTHCHECK_URL = config.get(
+        "healthcheck_url",
+        "http://localhost:5000"
+    )
 
-    config = ler_configuracao()
+    TOKEN = config.get(
+        "telegram_token",
+        ""
+    )
 
-    IMAGE_NAME = config["image"]
-    CONTAINER_NAME = config["container"]
+    CHAT_ID = config.get(
+        "telegram_chat_id",
+        ""
+    )
+
+    TELEGRAM_ENABLED = config.get(
+        "telegram_enabled",
+        False
+    )
+
+    if IMAGE_NAME == "" or CONTAINER_NAME == "":
+
+        registrar_log(
+            "Aguardando configuração pelo dashboard..."
+        )
+
+        time.sleep(30)
+
+        continue
 
     registrar_log(
         "Verificando atualizações..."
     )
+
     status["ultima_verificacao"] = datetime.now().strftime(
     "%Y-%m-%d %H:%M:%S"
     )
