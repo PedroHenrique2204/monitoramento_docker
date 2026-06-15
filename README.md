@@ -119,7 +119,7 @@ Todas as ações realizadas pelo monitor são registradas em arquivo de log para
 
 ---
 
-Configuração
+## Configuração
 
 Toda a configuração é realizada através do dashboard web.
 
@@ -132,19 +132,12 @@ Exemplo do arquivo de configuração
     "telegram_token": "TOKEN_DO_BOT",
     "telegram_chat_id": "CHAT_ID"
 
-Campos de Configuração
-Campo	Descrição
-image	Imagem Docker monitorada
-container	Nome do container que será atualizado
-healthcheck_url	URL utilizada para verificar a aplicação
-telegram_enabled	Habilita ou desabilita notificações
-telegram_token	Token do Bot Telegram
-telegram_chat_id	Chat ID que receberá as notificações
-
 Importante: O arquivo config.json é criado automaticamente quando as configurações são salvas pela primeira vez no dashboard.
 
 Configurando o Telegram
-1. Criar um Bot
+
+## 1. Criar um Bot
+
 Abra o Telegram.
 Procure por BotFather.
 Execute o comando:
@@ -152,7 +145,8 @@ Execute o comando:
 Escolha um nome para o bot.
 Escolha um username para o bot.
 Copie o Token fornecido pelo BotFather.
-2. Obter o Chat ID
+
+## 2. Obter o Chat ID
 
 Envie qualquer mensagem para o seu bot.
 
@@ -172,7 +166,7 @@ Localize o trecho:
 
 O valor de id será o Chat ID utilizado pelo monitor.
 
-3. Configurar no Dashboard
+## 3. Configurar no Dashboard
 
 Acesse:
 
