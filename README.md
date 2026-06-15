@@ -119,12 +119,11 @@ Todas as ações realizadas pelo monitor são registradas em arquivo de log para
 
 ---
 
-## Configuração
+Configuração
 
 Toda a configuração é realizada através do dashboard web.
 
-Exemplo do arquivo de configuração:
-
+Exemplo do arquivo de configuração
 {
     "image": "usuario/aplicacao:latest",
     "container": "nome-container",
@@ -133,7 +132,7 @@ Exemplo do arquivo de configuração:
     "telegram_token": "TOKEN_DO_BOT",
     "telegram_chat_id": "CHAT_ID"
 }
-Campos
+Campos de Configuração
 Campo	Descrição
 image	Imagem Docker monitorada
 container	Nome do container que será atualizado
@@ -141,16 +140,19 @@ healthcheck_url	URL utilizada para verificar a aplicação
 telegram_enabled	Habilita ou desabilita notificações
 telegram_token	Token do Bot Telegram
 telegram_chat_id	Chat ID que receberá as notificações
+
+Importante: O arquivo config.json é criado automaticamente quando as configurações são salvas pela primeira vez no dashboard.
+
 Configurando o Telegram
-Criar um Bot
+1. Criar um Bot
 Abra o Telegram.
 Procure por BotFather.
-Execute:
+Execute o comando:
 /newbot
 Escolha um nome para o bot.
 Escolha um username para o bot.
-Copie o Token fornecido.
-Obter o Chat ID
+Copie o Token fornecido pelo BotFather.
+2. Obter o Chat ID
 
 Envie qualquer mensagem para o seu bot.
 
@@ -158,13 +160,35 @@ Acesse:
 
 https://api.telegram.org/botSEU_TOKEN/getUpdates
 
-Localize o campo:
+Substitua SEU_TOKEN pelo token recebido do BotFather.
 
-"chat": {
-    "id": 123456789
+Localize o trecho:
+
+{
+    "chat": {
+        "id": 123456789
+    }
 }
 
-Utilize esse valor no campo Chat ID do dashboard.
+O valor de id será o Chat ID utilizado pelo monitor.
+
+3. Configurar no Dashboard
+
+Acesse:
+
+http://IP_DA_MAQUINA:8080/config
+
+Preencha os campos:
+
+Imagem Docker
+Nome do Container
+URL do Health Check
+Telegram Token
+Telegram Chat ID
+
+Marque a opção para habilitar notificações e clique em Salvar.
+
+Após isso, todas as atualizações e eventos do monitor serão enviados para o Telegram configurado.
 
 ---
 
