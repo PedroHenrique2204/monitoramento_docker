@@ -6,9 +6,6 @@ import os
 
 from datetime import datetime
 
-TOKEN = "8501560136:AAHxiVB-gMjtznc66rFyczUqkA4KzAohr9E"
-CHAT_ID = "5185104616"
-
 client = docker.from_env()
 
 CONFIG_FILE = "config.json"
@@ -67,7 +64,20 @@ def salvar_status(dados):
         )
 
 config = carregar_configuracao()
+TOKEN = config.get(
+    "telegram_token",
+    ""
+)
 
+CHAT_ID = config.get(
+    "telegram_chat_id",
+    ""
+)
+
+TELEGRAM_ENABLED = config.get(
+    "telegram_enabled",
+    False
+)
 IMAGE_NAME = config["image"]
 CONTAINER_NAME = config["container"]
 HEALTHCHECK_URL = config.get(
@@ -103,6 +113,12 @@ def ler_configuracao():
 
 def enviar_telegram(mensagem):
 
+    if not TELEGRAM_ENABLED:
+        return
+
+    if TOKEN == "" or CHAT_ID == "":
+        return
+
     try:
 
         requests.get(
@@ -119,7 +135,6 @@ def enviar_telegram(mensagem):
         registrar_log(
             f"Erro Telegram: {erro}"
         )
-
 
 def obter_digest():
 
@@ -218,11 +233,11 @@ while True:
 
     if verificar_aplicacao():
 
-    	status["health_check"] = "OK"
+        status["health_check"] = "OK"
 
     else:
 
-    	status["health_check"] = "FALHOU"
+        status["health_check"] = "FALHOU"
 
     salvar_status(status)
 

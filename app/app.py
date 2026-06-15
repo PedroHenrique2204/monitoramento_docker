@@ -4,6 +4,6 @@ app = Flask(__name__)
 
 @app.route("/")
 def home():
-    return "versão:2"
+    return "versão:67"
 
 app.run(host="0.0.0.0", port=5000)

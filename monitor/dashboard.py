@@ -105,7 +105,10 @@ def config():
      	dados = {
         	"image": "",
         	"container": "",
-        	"healthcheck_url": ""
+        	"healthcheck_url": "",
+                "telegram_enabled": False,
+                "telegram_token": "",
+                "telegram_chat_id": ""
     	}
 
     return f"""
@@ -150,6 +153,34 @@ def config():
 
             <br><br>
 
+            <p>Telegram Bot Token:</p>
+
+	    <input
+    		type="text"
+    		name="telegram_token"
+    		value="{dados.get('telegram_token', '')}"
+    		size="70"
+	    >
+
+	    <p>Telegram Chat ID:</p>
+
+	    <input
+    		type="text"
+    		name="telegram_chat_id"
+    		value="{dados.get('telegram_chat_id', '')}"
+    		size="50"
+	    >
+
+	    <p>
+    	    	<input
+        		type="checkbox"
+        		name="telegram_enabled"
+        		{"checked" if dados.get("telegram_enabled") else ""}
+    		>
+    		Ativar notificações Telegram
+	    </p>
+
+
             <button type="submit">
                 Salvar
             </button>
@@ -170,10 +201,20 @@ def salvar():
 
     healthcheck_url = request.form["healthcheck_url"]
 
+    telegram_token = request.form["telegram_token"]
+
+    telegram_chat_id = request.form["telegram_chat_id"]
+
+    telegram_enabled = (
+    	"telegram_enabled" in request.form
+    )
     config = {
         "image": imagem,
         "container": container,
-        "healthcheck_url": healthcheck_url
+        "healthcheck_url": healthcheck_url,
+        "telegram_enabled": telegram_enabled,
+	"telegram_token": telegram_token,
+        "telegram_chat_id": telegram_chat_id
     }
 
     with open(
