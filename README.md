@@ -8,7 +8,7 @@ Além da atualização automática, o projeto oferece:
 
 * Dashboard Web para monitoramento e configuração.
 * Health Check.
-* Notificações via Telegram.
+* Notificações via Telegram configuráveis pelo usuário.
 * Registro de logs das operações realizadas.
 * Execução totalmente containerizada com Docker Compose.
 
@@ -51,12 +51,15 @@ O dashboard permite:
 
 ### Notificações Telegram
 
+O usuário pode configurar suas próprias credenciais diretamente pelo dashboard.
+
 O sistema envia mensagens informando:
 
-* Detecção de novas versões.
-* Atualizações realizadas.
-* Resultado do Health Check.
-* Possíveis erros durante o processo.
+Detecção de novas versões.
+Atualizações realizadas.
+Resultado do Health Check.
+Falhas durante o processo.
+Erros encontrados pelo monitor.
 
 ### Logs
 
@@ -118,17 +121,50 @@ Todas as ações realizadas pelo monitor são registradas em arquivo de log para
 
 ## Configuração
 
-A configuração é realizada através do dashboard web.
+Toda a configuração é realizada através do dashboard web.
 
-Exemplo:
+Exemplo do arquivo de configuração:
 
-```json
 {
     "image": "usuario/aplicacao:latest",
     "container": "nome-container",
-    "healthcheck_url": "http://IP:5000/"
+    "healthcheck_url": "http://IP:5000",
+    "telegram_enabled": true,
+    "telegram_token": "TOKEN_DO_BOT",
+    "telegram_chat_id": "CHAT_ID"
 }
-```
+Campos
+Campo	Descrição
+image	Imagem Docker monitorada
+container	Nome do container que será atualizado
+healthcheck_url	URL utilizada para verificar a aplicação
+telegram_enabled	Habilita ou desabilita notificações
+telegram_token	Token do Bot Telegram
+telegram_chat_id	Chat ID que receberá as notificações
+Configurando o Telegram
+Criar um Bot
+Abra o Telegram.
+Procure por BotFather.
+Execute:
+/newbot
+Escolha um nome para o bot.
+Escolha um username para o bot.
+Copie o Token fornecido.
+Obter o Chat ID
+
+Envie qualquer mensagem para o seu bot.
+
+Acesse:
+
+https://api.telegram.org/botSEU_TOKEN/getUpdates
+
+Localize o campo:
+
+"chat": {
+    "id": 123456789
+}
+
+Utilize esse valor no campo Chat ID do dashboard.
 
 ---
 
