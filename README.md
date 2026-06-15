@@ -1,15 +1,13 @@
-# AutoDocker Update Monitor
-
 Sistema de monitoramento e atualização automática de containers Docker baseado em imagens armazenadas no Docker Hub.
 
 ## Sobre o Projeto
 
-O AutoDocker Update Monitor foi desenvolvido com o objetivo de automatizar o processo de atualização de aplicações containerizadas. O sistema monitora periodicamente uma imagem Docker hospedada em um repositório remoto e, ao detectar uma nova versão, realiza automaticamente a atualização do container em execução.
+O projeto foi desenvolvido com o objetivo de automatizar o processo de atualização de aplicações containerizadas. O sistema monitora periodicamente uma imagem Docker hospedada em um repositório remoto e, ao detectar uma nova versão, realiza automaticamente a atualização do container em execução.
 
 Além da atualização automática, o projeto oferece:
 
 * Dashboard Web para monitoramento e configuração.
-* Health Check configurável.
+* Health Check.
 * Notificações via Telegram.
 * Registro de logs das operações realizadas.
 * Execução totalmente containerizada com Docker Compose.
@@ -48,7 +46,6 @@ O dashboard permite:
 * Visualizar o status do monitor.
 * Verificar a última atualização realizada.
 * Consultar o total de atualizações.
-* Visualizar a imagem monitorada.
 * Alterar as configurações do monitor.
 * Configurar a URL do Health Check.
 
@@ -64,25 +61,6 @@ O sistema envia mensagens informando:
 ### Logs
 
 Todas as ações realizadas pelo monitor são registradas em arquivo de log para auditoria e acompanhamento.
-
----
-
-## Arquitetura do Projeto
-
-```text
-Docker Hub
-     │
-     ▼
-Monitor Python
-     │
-     ├── Verifica novas imagens
-     ├── Atualiza containers
-     ├── Executa Health Check
-     └── Envia notificações Telegram
-                │
-                ▼
-          Dashboard Web
-```
 
 ---
 
@@ -176,76 +154,7 @@ Informações exibidas:
 
 ## Execução
 
-### Construir os containers
-
-```bash
-docker compose build
-```
-
-### Iniciar os serviços
-
-```bash
-docker compose up -d
-```
-
-### Verificar containers
-
-```bash
-docker ps
-```
-
-### Visualizar logs
-
-```bash
-docker logs monitor-container
-```
-
----
-
-## Exemplo de Atualização
-
-1. Alterar o código da aplicação.
-2. Construir uma nova imagem:
-
-```bash
-docker build -t usuario/aplicacao:latest .
-```
-
-3. Enviar para o Docker Hub:
-
-```bash
-docker push usuario/aplicacao:latest
-```
-
-4. O monitor detectará automaticamente a nova versão e realizará a atualização.
-
----
-
-
-
-# AutoDocker Update Monitor - Guia de Instalação
-
-## 1. Instalar Docker
-
-Ubuntu:
-
-sudo apt update
-
-sudo apt install docker.io docker-compose -y
-
-sudo systemctl enable docker
-
-sudo systemctl start docker
-
-Verificar:
-
-docker --version
-
-docker-compose --version
-
----
-
-## 2. Clonar o projeto
+## 1. Clonar o projeto
 
 git clone https://github.com/PedroHenrique2204/monitoramento_docker.git
 
@@ -253,7 +162,7 @@ cd monitoramento_docker/monitor
 
 ---
 
-## 3. Iniciar o monitor
+## 2. Iniciar o monitor
 
 docker-compose up -d
 
@@ -266,6 +175,12 @@ Devem aparecer os containers:
 monitor-container
 
 dashboard-container
+
+## 3. Acompanhar logs
+
+Monitor:
+
+docker logs --tail 50 monitor-container
 
 ---
 
@@ -300,9 +215,17 @@ http://IP_DA_MAQUINA:8080/config
 Preencha:
 
 Imagem:
+Nome da imagem
+
+Exemplo:
+
 pedro22042004/flask-app:latest
 
 Container:
+Nome do container
+
+Exemplo:
+
 flask-app
 
 Health Check URL:
@@ -351,17 +274,8 @@ http://IP_DA_MAQUINA:8080
 
 Monitor:
 
-docker logs -f monitor-container
+docker logs --tail 50 monitor-container
 
-Dashboard:
-
-docker logs -f dashboard-container
-
-Aplicação:
-
-docker logs -f flask-app
-
----
 
 ## 10. Testar atualização automática
 
