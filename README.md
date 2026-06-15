@@ -166,24 +166,6 @@ Localize o trecho:
 
 O valor de id será o Chat ID utilizado pelo monitor.
 
-## 3. Configurar no Dashboard
-
-Acesse:
-
-http://IP_DA_MAQUINA:8080/config
-
-Preencha os campos:
-
-Imagem Docker
-Nome do Container
-URL do Health Check
-Telegram Token
-Telegram Chat ID
-
-Marque a opção para habilitar notificações e clique em Salvar.
-
-Após isso, todas as atualizações e eventos do monitor serão enviados para o Telegram configurado.
-
 ---
 
 ## Dashboard
