@@ -216,6 +216,17 @@ while True:
 
     salvar_status(status)    
 
+    if verificar_aplicacao():
+
+    	status["health_check"] = "OK"
+
+    else:
+
+    	status["health_check"] = "FALHOU"
+
+    salvar_status(status)
+
+
     try:
 
         digest_atual = obter_digest()
