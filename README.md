@@ -222,3 +222,173 @@ docker push usuario/aplicacao:latest
 ---
 
 
+
+# AutoDocker Update Monitor - Guia de Instalação
+
+## 1. Instalar Docker
+
+Ubuntu:
+
+sudo apt update
+
+sudo apt install docker.io docker-compose -y
+
+sudo systemctl enable docker
+
+sudo systemctl start docker
+
+Verificar:
+
+docker --version
+
+docker-compose --version
+
+---
+
+## 2. Clonar o projeto
+
+git clone https://github.com/PedroHenrique2204/monitoramento_docker.git
+
+cd monitoramento_docker/monitor
+
+---
+
+## 3. Iniciar o monitor
+
+docker-compose up -d
+
+Verificar:
+
+docker ps
+
+Devem aparecer os containers:
+
+monitor-container
+
+dashboard-container
+
+---
+
+## 4. Descobrir o IP da máquina
+
+hostname -I
+
+Exemplo:
+
+192.168.0.38
+
+---
+
+## 5. Abrir o dashboard
+
+No navegador:
+
+http://IP_DA_MAQUINA:8080
+
+Exemplo:
+
+http://192.168.0.38:8080
+
+---
+
+## 6. Configurar o monitor
+
+Acesse:
+
+http://IP_DA_MAQUINA:8080/config
+
+Preencha:
+
+Imagem:
+pedro22042004/flask-app:latest
+
+Container:
+flask-app
+
+Health Check URL:
+http://IP_DA_MAQUINA:5000
+
+Exemplo:
+
+http://192.168.0.38:5000
+
+Clique em Salvar.
+
+---
+
+## 7. Iniciar a aplicação monitorada
+
+Abra outro terminal:
+
+cd ../app
+
+docker build -t pedro22042004/flask-app:latest .
+
+docker run -d 
+--name flask-app 
+-p 5000:5000 
+pedro22042004/flask-app:latest
+
+Verificar:
+
+docker ps
+
+---
+
+## 8. Verificar funcionamento
+
+Aplicação:
+
+http://IP_DA_MAQUINA:5000
+
+Dashboard:
+
+http://IP_DA_MAQUINA:8080
+
+---
+
+## 9. Acompanhar logs
+
+Monitor:
+
+docker logs -f monitor-container
+
+Dashboard:
+
+docker logs -f dashboard-container
+
+Aplicação:
+
+docker logs -f flask-app
+
+---
+
+## 10. Testar atualização automática
+
+Alterar o conteúdo do arquivo:
+
+app/app.py
+
+Exemplo:
+
+return "Versão 2.0"
+
+Gerar nova imagem:
+
+docker build -t pedro22042004/flask-app:latest .
+
+Enviar para o Docker Hub:
+
+docker push pedro22042004/flask-app:latest
+
+Aguardar até 30 segundos.
+
+O monitor irá:
+
+* Detectar novo digest
+* Baixar a nova imagem
+* Remover o container antigo
+* Criar o novo container
+* Executar o Health Check
+* Atualizar o dashboard
+* Enviar notificação para o Telegram
