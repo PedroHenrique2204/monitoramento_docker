@@ -107,7 +107,7 @@ def registrar_log(mensagem):
 
     linha = f"{horario} - {mensagem}"
 
-    print(linha)
+    print(linha, flush=True)
 
     with open(
         "monitor.log",
@@ -247,6 +247,11 @@ while True:
 
     if IMAGE_NAME == "" or CONTAINER_NAME == "":
 
+        status["status"] = "AGUARDANDO CONFIGURACAO"
+        status["health_check"] = "-"
+
+        salvar_status(status)
+
         registrar_log(
             "Aguardando configuração pelo dashboard..."
         )
@@ -254,7 +259,8 @@ while True:
         time.sleep(30)
 
         continue
-
+    status["status"] = "ONLINE"
+    salvar_status(status)
     registrar_log(
         "Verificando atualizações..."
     )
@@ -290,7 +296,18 @@ while True:
             f"Digest salvo: {digest_salvo}"
         )
 
-        if digest_atual != digest_salvo:
+        if digest_salvo == "":
+
+            salvar_digest(digest_atual)
+
+            registrar_log(
+                "Primeira execução - digest inicial salvo."
+            )
+
+            time.sleep(30)
+            continue
+
+        elif digest_atual != digest_salvo:
 
             registrar_log(
                 "Nova versão detectada!"
