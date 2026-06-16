@@ -60,11 +60,11 @@ O usuário pode configurar suas próprias credenciais diretamente pelo dashboard
 
 O sistema envia mensagens informando:
 
-Detecção de novas versões.
-Atualizações realizadas.
-Resultado do Health Check.
-Falhas durante o processo.
-Erros encontrados pelo monitor.
+- Detecção de novas versões.
+- Atualizações realizadas.
+- Resultado do Health Check.
+- Falhas durante o processo.
+- Erros encontrados pelo monitor.
 
 ### Logs
 
@@ -145,10 +145,13 @@ Configurando o Telegram
 
 Abra o Telegram.
 Procure por BotFather.
+
 Execute o comando:
+```
 /newbot
-Escolha um nome para o bot.
-Escolha um username para o bot.
+```
+Escolha um nome e um username para o bot.
+
 Copie o Token fornecido pelo BotFather.
 
 ## 2. Obter o Chat ID
@@ -157,17 +160,15 @@ Envie qualquer mensagem para o seu bot.
 
 Acesse:
 
-https://api.telegram.org/botSEU_TOKEN/getUpdates
+    https://api.telegram.org/bot<SEU_TOKEN>/getUpdates
 
-Substitua SEU_TOKEN pelo token recebido do BotFather.
+Substitua <SEU_TOKEN> pelo token recebido do BotFather.
 
 Localize o trecho:
 
-{
     "chat": {
-        "id": 123456789
-    }
-}
+            "id": 123456789
+        
 
 O valor de id será o Chat ID utilizado pelo monitor.
 
@@ -197,41 +198,40 @@ Informações exibidas:
 
 ## 1. Clonar o projeto
 
-git clone https://github.com/PedroHenrique2204/monitoramento_docker.git
+      git clone https://github.com/PedroHenrique2204/monitoramento_docker.git
 
-cd monitoramento_docker/monitor
-
+      cd monitoramento_docker/monitor
 ---
 
 ## 2. Iniciar o monitor
 
-docker-compose up -d
+      docker-compose up -d
 
 Verificar:
 
-docker ps
+      docker ps
 
 Devem aparecer os containers:
 
-monitor-container
+      monitor-container
 
-dashboard-container
+      dashboard-container
 
 ## 3. Acompanhar logs
 
 Monitor:
 
-docker logs -f --tail 50 monitor-container
+      docker logs -f --tail 50 monitor-container
 
 ---
 
 ## 4. Descobrir o IP da máquina
 
-hostname -I
+      hostname -I
 
 Exemplo:
 
-192.168.0.38
+      192.168.0.38
 
 ---
 
@@ -239,11 +239,11 @@ Exemplo:
 
 No navegador:
 
-http://IP_DA_MAQUINA:8080
+      http://IP_DA_MAQUINA:8080
 
 Exemplo:
 
-http://192.168.0.38:8080
+      http://192.168.0.38:8080
 
 ---
 
@@ -251,30 +251,30 @@ http://192.168.0.38:8080
 
 Acesse:
 
-http://IP_DA_MAQUINA:8080/config
+      http://IP_DA_MAQUINA:8080/config
 
-Preencha:
-
-Imagem:
-Nome da imagem
-
+Preencha a imagem:
+```
+Imagem: Nome da imagem
+```
 Exemplo:
 
-pedro22042004/flask-app:latest
-
-Container:
-Nome do container
-
+      pedro22042004/flask-app:latest
+Preencha o container:
+```
+Container: Nome do container
+```
 Exemplo:
-
+```
 flask-app
-
+```
 Health Check URL:
-http://IP_DA_MAQUINA:5000
+
+        http://IP_DA_MAQUINA:5000
 
 Exemplo:
 
-http://192.168.0.38:5000
+      http://192.168.0.38:5000
 
 Clique em Salvar.
 
@@ -283,19 +283,22 @@ Clique em Salvar.
 ## 7. Iniciar a aplicação monitorada
 
 Abra outro terminal:
-
+```
 cd ../app
-
+```
+```
 docker build -t pedro22042004/flask-app:latest .
-
+```
+```
 docker run -d 
 --name flask-app 
 -p 5000:5000 
 pedro22042004/flask-app:latest
+```
 
 Verificar:
 
-docker ps
+      docker ps
 
 ---
 
@@ -303,11 +306,11 @@ docker ps
 
 Aplicação:
 
-http://IP_DA_MAQUINA:5000
+      http://IP_DA_MAQUINA:5000
 
 Dashboard:
 
-http://IP_DA_MAQUINA:8080
+      http://IP_DA_MAQUINA:8080
 
 ---
 
@@ -315,26 +318,26 @@ http://IP_DA_MAQUINA:8080
 
 Monitor:
 
-docker logs --tail 50 monitor-container
+      docker logs --tail 50 monitor-container
 
 
 ## 10. Testar atualização automática
 
 Alterar o conteúdo do arquivo:
 
-app/app.py
+      app/app.py
 
 Exemplo:
 
-return "Versão 2.0"
+      return "Versão 2.0"
 
 Gerar nova imagem:
 
-docker build -t pedro22042004/flask-app:latest .
+      docker build -t pedro22042004/flask-app:latest .
 
 Enviar para o Docker Hub:
 
-docker push pedro22042004/flask-app:latest
+      docker push pedro22042004/flask-app:latest
 
 Aguardar até 30 segundos.
 
