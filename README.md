@@ -1,4 +1,9 @@
-Sistema de monitoramento e atualização automática de containers Docker baseado em imagens armazenadas no Docker Hub.
+# Sistema de monitoramento e atualização automática de containers Docker baseado em imagens armazenadas no Docker Hub.
+
+## Integrantes do projeto
+- Ana Clara Marques
+- Pedro Henrique Remigio
+- Rebeca Dantas Cabral
 
 ## Sobre o Projeto
 
