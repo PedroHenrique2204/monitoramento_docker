@@ -216,7 +216,7 @@ dashboard-container
 
 Monitor:
 
-docker logs --tail 50 monitor-container
+docker logs -f --tail 50 monitor-container
 
 ---
 
