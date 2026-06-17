@@ -19,6 +19,13 @@ Além da atualização automática, o projeto oferece:
 
 ---
 
+## Vídeo de Execução e Validação do Projeto
+
+Acesse o link do YouTube para assistir ao Vídeo didático sobre o referido projeto:
+* https://youtu.be/KwX_Krks0c0
+
+---
+
 ## Objetivo
 
 O objetivo principal do projeto é reduzir a necessidade de intervenção manual em ambientes Docker, permitindo que aplicações sejam atualizadas automaticamente sempre que uma nova imagem for publicada.
