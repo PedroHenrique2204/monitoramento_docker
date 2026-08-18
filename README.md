@@ -228,7 +228,7 @@ Devem aparecer os containers:
 
 Monitor:
 
-      docker logs -f --tail 50 monitor-container
+      docker logs -f --tail 10 monitor-container
 
 ---
 
@@ -297,10 +297,7 @@ cd ../app
 docker build -t pedro22042004/flask-app:latest .
 ```
 ```
-docker run -d 
---name flask-app 
--p 5000:5000 
-pedro22042004/flask-app:latest
+docker run -d --name flask-app -p 5000:5000 pedro22042004/flask-app:latest
 ```
 
 Verificar:
@@ -325,7 +322,7 @@ Dashboard:
 
 Monitor:
 
-      docker logs --tail 50 monitor-container
+      docker logs -f --tail 10 monitor-container
 
 
 ## 10. Testar atualização automática
